@@ -1,6 +1,6 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import model.ClassUC;
+import Entities.ClassUC;
 
 public class Json {
 

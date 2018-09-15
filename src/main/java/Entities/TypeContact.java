@@ -1,4 +1,4 @@
-package model;
+package Entities;
 
 public enum TypeContact {
     WORK,

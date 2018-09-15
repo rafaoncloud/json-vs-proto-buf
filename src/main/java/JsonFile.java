@@ -1,5 +1,5 @@
 import com.google.gson.Gson;
-import model.ClassUC;
+import Entities.ClassUC;
 
 import java.io.FileReader;
 import java.io.FileWriter;

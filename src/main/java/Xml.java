@@ -1,10 +1,8 @@
-import model.ClassUC;
-import model.Contact;
+import Entities.ClassUC;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.PropertyException;
 import java.io.StringWriter;
 
 public class Xml

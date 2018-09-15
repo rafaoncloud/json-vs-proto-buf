@@ -1,7 +1,6 @@
-import model.*;
+import Entities.*;
 
 import java.io.*;
-import java.util.Arrays;
 
 public class Binary {
 

@@ -1,4 +1,4 @@
-import model.ClassUC;
+import Entities.ClassUC;
 
 import java.io.*;
 

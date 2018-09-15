@@ -1,4 +1,4 @@
-package model;
+package Entities;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
