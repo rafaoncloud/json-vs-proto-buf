@@ -6,6 +6,8 @@
         <option name="createEmptyContentRootDirectories" value="true" />
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="C:/" />
+        <option name="gradleJvm" value="10" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -13,5 +15,6 @@
         </option>
       </GradleProjectSettings>
     </option>
+
   </component>
 </project>

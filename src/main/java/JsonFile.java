@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import model.ClassUC;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -7,7 +8,7 @@ import java.io.Reader;
 
 public class JsonFile {
 
-    public static final String PATH = "classUC.txt";
+    private static final String PATH = "Json_classUC.txt";
 
     public static ClassUC read(){
 
@@ -36,6 +37,6 @@ public class JsonFile {
             e.printStackTrace();
         }
 
-        System.out.println("Successfully wrote on file!");
+        System.out.println("Successfully write on file!");
     }
 }
