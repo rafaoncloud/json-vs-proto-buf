@@ -12,11 +12,11 @@ public class Main {
         //System.out.println("Json");
         //Json.run(classUC);
 
-        System.out.println("Xml");
-        Xml.run(classUC);
+        //System.out.println("Xml");
+        //Xml.run(classUC);
 
-        //System.out.println("Binary");
-        //Binary.run(classUC);
+        System.out.println("Binary");
+        Binary.run(classUC);
 
     }
 

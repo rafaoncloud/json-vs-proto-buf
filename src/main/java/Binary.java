@@ -8,12 +8,17 @@ public class Binary {
     {
         System.out.println("Class Name: " + classUC.getName());
         long startTime = System.nanoTime();
-        byte[] stream = serialize(classUC);
+        //byte[] stream = serialize(classUC);
+
+        //ClassUC classUC2 = new ClassUC.Builder(classUC.getName(),classUC.getStudents(),classUC.getDirector()).build();
+
+        //final byte[] binaryAlbum = classUC2.toByteArray();
+
         long sDuration = (System.nanoTime() - startTime);
 
 
         long startSTime = System.nanoTime();
-        ClassUC newClassUC = Deserializes(stream);
+       // ClassUC newClassUC = Deserializes(stream);
         long dDuration = (System.nanoTime() - startSTime);
 
         System.out.println("Serialize duration " + sDuration + " milliseconds");

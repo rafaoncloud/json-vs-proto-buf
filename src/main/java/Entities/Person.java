@@ -1,17 +1,17 @@
 package Entities;
 
+import com.google.protobuf.Api;
+
 import java.util.List;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 
 public class Person {
-    @XmlAttribute
+
     private final int id;
-    @XmlElement
+
     private final String name;
-    @XmlElement
+
     private final String email;
-    @XmlElement
+
     private List<Contact> contacts;
 
     public Person(int id, String name, String email, List<Contact> contacts) {
@@ -37,7 +37,8 @@ public class Person {
         return contacts;
     }
 
-    public void setContacts(List<Contact> contacts) {
+    public void setContacts(List<Contact> contacts)
+    {
         this.contacts = contacts;
     }
 }
