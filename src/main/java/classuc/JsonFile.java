@@ -10,13 +10,11 @@ import java.io.Reader;
 
 public class JsonFile {
 
-    public static final String PATH = "classUC.txt";
-
-    public static ClassUC read(){
+    public static ClassUC read(String path){
 
         Gson gson = new Gson();
 
-        try (Reader reader = new FileReader(PATH)) {
+        try (Reader reader = new FileReader(path)) {
 
             ClassUC classUC = gson.fromJson(reader, ClassUC.class);
             return classUC;
@@ -28,11 +26,13 @@ public class JsonFile {
         return null;
     }
 
-    public static void write(String jsonRepresentation){
+    public static void write(ClassUC classUC, String path){
 
-        try (FileWriter writer = new FileWriter(PATH)) {
+        Gson gson = new Gson();
+        String json = gson.toJson(classUC);
+        try (FileWriter writer = new FileWriter(path)) {
 
-            writer.write(jsonRepresentation);
+            writer.write(json);
             writer.flush();
 
         } catch (IOException e) {
