@@ -1,3 +1,5 @@
+package benchmark;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,6 +24,7 @@ public class Main {
         ClassUC classUCread = JsonFile.read();
         // Print to test the result
         printPrettyJSON(classUCread);
+
     }
 
     public static ClassUC build(){

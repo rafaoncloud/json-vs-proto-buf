@@ -1,3 +1,5 @@
+package benchmark;
+
 import java.util.List;
 
 public class Student extends Person{

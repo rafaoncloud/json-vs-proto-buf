@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+//package = "benchmark;
+
+option java_outer_classname = "ClassUCProtos";
+
+message Person{
+  optional int32 id = 1;
+  optional string name = 2;
+  optional string email = 3;
+  repeated Contact contact = 4;
+
+  enum TypeContact{
+    WORK  = 0;
+    HOME = 1;
+    MOBILE = 2;
+  }
+
+  message Contact {
+    optional string number = 1;
+    optional TypeContact type = 2 [default = HOME];
+  }
+}
+
+message ClassUC {
+  optional string name = 1;
+  repeated Person students = 2;
+  optional Person director = 3;
+}

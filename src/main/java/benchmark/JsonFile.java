@@ -1,3 +1,5 @@
+package benchmark;
+
 import com.google.gson.Gson;
 
 import java.io.FileReader;

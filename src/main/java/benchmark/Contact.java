@@ -1,3 +1,5 @@
+package benchmark;
+
 public class Contact {
 
     private final String number;
