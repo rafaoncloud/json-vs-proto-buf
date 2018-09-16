@@ -2,6 +2,9 @@ package benchmark;
 
 public class ClassUCProtosBuilders {
 
+    // Build ClassUC giving the number of students
+    // Each person has 2 contacts
+    // The string attributes have 10 characters
     public static ClassUCProtos.ClassUC buildClassUC(int numStudents){
 
         ClassUCProtos.ClassUC.Builder builder = ClassUCProtos.ClassUC.newBuilder();
@@ -41,7 +44,11 @@ public class ClassUCProtosBuilders {
             throw new RuntimeException("Too Large.");
         }
 
-        person.setId(id).setName(name).setEmail(email).addContact(buildContact()).addContact(buildContact());
+        person.setId(id)
+                .setName(name)
+                .setEmail(email)
+                .addContact(buildContact())
+                .addContact(buildContact());
         return person.build();
     }
 
