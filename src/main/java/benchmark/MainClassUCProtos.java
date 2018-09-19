@@ -1,5 +1,9 @@
 package benchmark;
 
+import classuc.BenchmarkTimes;
+import classuc.ClassUC;
+import classuc.MainGson;
+
 import java.io.*;
 
 public class MainClassUCProtos {
@@ -8,8 +12,8 @@ public class MainClassUCProtos {
     public static int MAX_EXPONENT = 16;
 
     public static int NUM_STUDENTS;
-    public static final String INITIAL_PATH = "binary/number-students-";
-    public static final String PATH_CSV = "binary/results.csv";
+    public static final String INITIAL_PATH = "binary-v2/number-students-";
+    public static final String PATH_CSV = "binary-v2/results-v2.csv";
     public static String FILE_PATH; // O/I the Protocol Buffers Stream
 
     public static void main(String[] args) {
@@ -18,12 +22,15 @@ public class MainClassUCProtos {
         NUM_STUDENTS = (int) Math.pow(2, exponent);
         FILE_PATH = INITIAL_PATH + NUM_STUDENTS + ".txt";
 
+        initCSV(); // Fill column headers
+
         while(exponent <= MAX_EXPONENT) {
             for (int i = 0; i < 10; i++) {
                 FILE_PATH = INITIAL_PATH + NUM_STUDENTS + "-rep-" + (i+1) + ".txt";
                 // Create Object to serialize and deserialize
                 ClassUCProtos.ClassUC classUC = ClassUCProtosBuilders.buildClassUC(NUM_STUDENTS);
 
+                /*
                 // Write Time
                 long startTimeWrite = startTimer();
                 write(classUC);
@@ -34,10 +41,16 @@ public class MainClassUCProtos {
                 long startTimeRead = startTimer();
                 read();
                 long readTime = endTimer(startTimeRead);
-                System.out.println(readTime + "read");
+                */
+
+                BenchmarkTimes benchmarkTimes = MainClassUCProtos.writeRead(classUC,PATH_CSV);
 
                 //Print to CSV
-                writeCSV(NUM_STUDENTS,i + 1,writeTime,readTime);
+                writeCSV(NUM_STUDENTS,i + 1,
+                        benchmarkTimes.getInitialization(),
+                        benchmarkTimes.getSerialization(),
+                        benchmarkTimes.getDeserialization(),
+                        benchmarkTimes.getSerializedSize());
             }
             exponent++;
             NUM_STUDENTS = (int) Math.pow(2, exponent);
@@ -45,18 +58,50 @@ public class MainClassUCProtos {
         }
     }
 
-    public static void writeCSV(int numStudents,int repetition, long writeTime, long readTime){
+    public static void writeCSV(int numStudents,int repetition,long initializerTime, long serializeTime, long deserializeTime, int serializedSize){
 
         try {
-            FileWriter pw = new FileWriter(new File(PATH_CSV), true);
+            FileWriter pw = new FileWriter(new File(PATH_CSV), true); // Append
             StringBuilder sb = new StringBuilder();
             sb.append(numStudents);
             sb.append(';');
             sb.append(repetition);
             sb.append(';');
-            sb.append(writeTime);
+            sb.append(initializerTime);
             sb.append(';');
-            sb.append(readTime);
+            sb.append(serializeTime);
+            sb.append(';');
+            sb.append(deserializeTime);
+            sb.append(';');
+            sb.append(serializedSize);
+            sb.append('\n');
+
+            //pw.print(sb.toString());
+            pw.write(sb.toString());
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void initCSV(){
+
+        try {
+            FileWriter pw = new FileWriter(new File(PATH_CSV), true); // Append
+            StringBuilder sb = new StringBuilder();
+            sb.append("Num Students");
+            sb.append(';');
+            sb.append("Repetitions");
+            sb.append(';');
+            sb.append("Initializer Time");
+            sb.append(';');
+            sb.append("Serialize Time");
+            sb.append(';');
+            sb.append("Deserialize Time");
+            sb.append(';');
+            sb.append("Serialized File Size");
             sb.append('\n');
 
             //pw.print(sb.toString());
@@ -101,5 +146,37 @@ public class MainClassUCProtos {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static BenchmarkTimes writeRead(ClassUCProtos.ClassUC classUC, String path){
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ByteArrayInputStream byteArrayInputStream = null;
+        int serializedObjectSize = 0;
+        long serializeTime = 0;
+        long deserializeTime = 0;
+
+        try {
+            long serializeStart = MainGson.startTimer();
+            // Serialization
+            classUC.writeTo(byteArrayOutputStream);
+            serializeTime = endTimer(serializeStart);
+
+            byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+            serializedObjectSize = byteArrayOutputStream.toByteArray().length;
+
+
+            long deserializeStart = MainGson.startTimer();
+            // Deserialization
+            ClassUCProtos.ClassUC classUCdes =  ClassUCProtos.ClassUC.parseFrom(byteArrayInputStream);
+            deserializeTime = endTimer(deserializeStart);
+
+            byteArrayInputStream.close();
+            byteArrayOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new BenchmarkTimes(0,serializeTime,deserializeTime,serializedObjectSize);
     }
 }

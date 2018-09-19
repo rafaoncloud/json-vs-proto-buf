@@ -18,8 +18,8 @@ public class MainGson {
     public static int MAX_EXPONENT = 16;
 
     public static int NUM_STUDENTS;
-    public static final String INITIAL_PATH = "textual/number-students-";
-    public static final String PATH_CSV = "textual/results.csv";
+    public static final String INITIAL_PATH = "textual-v2/number-students-";
+    public static final String PATH_CSV = "textual-v2/results.csv";
     public static String FILE_PATH; // O/I the Protocol Buffers Stream
 
     public static void main(String[] args) {
@@ -28,12 +28,15 @@ public class MainGson {
         NUM_STUDENTS = (int) Math.pow(2, exponent);
         FILE_PATH = INITIAL_PATH + NUM_STUDENTS + ".txt";
 
+        initCSV(); // Fill column headers
+
         while(exponent <= MAX_EXPONENT) {
             for (int i = 0; i < 10; i++) {
                 FILE_PATH = INITIAL_PATH + NUM_STUDENTS + "-rep-" + (i+1) + ".txt";
                 // Create Object to serialize and deserialize
                 ClassUC classUC = ClassUCBuilders.buildClassUC(NUM_STUDENTS);
 
+                /*
                 // Write Time
                 long startTimeWrite = startTimer();
                 JsonFile.write(classUC,FILE_PATH);
@@ -45,9 +48,12 @@ public class MainGson {
                 ClassUC classUCread = JsonFile.read(FILE_PATH);
                 long readTime = endTimer(startTimeRead);
                 System.out.println(readTime + "read");
+                */
+
+                BenchmarkTimes benchmarkTimes = JsonFile.writeRead(classUC,FILE_PATH);
 
                 //Print to CSV
-                writeCSV(NUM_STUDENTS,i + 1,writeTime,readTime);
+                writeCSV(NUM_STUDENTS,i + 1,benchmarkTimes.getInitialization(),benchmarkTimes.getSerialization(),benchmarkTimes.getDeserialization(),benchmarkTimes.getSerializedSize());
             }
             exponent++;
             NUM_STUDENTS = (int) Math.pow(2, exponent);
@@ -106,18 +112,50 @@ public class MainGson {
 
     }
 
-    public static void writeCSV(int numStudents,int repetition, long writeTime, long readTime){
+    public static void writeCSV(int numStudents,int repetition,long initializerTime, long serializeTime, long deserializeTime, int serializedSize){
 
         try {
-            FileWriter pw = new FileWriter(new File(PATH_CSV), true);
+            FileWriter pw = new FileWriter(new File(PATH_CSV), true); // Append
             StringBuilder sb = new StringBuilder();
             sb.append(numStudents);
             sb.append(';');
             sb.append(repetition);
             sb.append(';');
-            sb.append(writeTime);
+            sb.append(initializerTime);
             sb.append(';');
-            sb.append(readTime);
+            sb.append(serializeTime);
+            sb.append(';');
+            sb.append(deserializeTime);
+            sb.append(';');
+            sb.append(serializedSize);
+            sb.append('\n');
+
+            //pw.print(sb.toString());
+            pw.write(sb.toString());
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void initCSV(){
+
+        try {
+            FileWriter pw = new FileWriter(new File(PATH_CSV), true); // Append
+            StringBuilder sb = new StringBuilder();
+            sb.append("Num Students");
+            sb.append(';');
+            sb.append("Repetitions");
+            sb.append(';');
+            sb.append("Initializer Time");
+            sb.append(';');
+            sb.append("Serialize Time");
+            sb.append(';');
+            sb.append("Deserialize Time");
+            sb.append(';');
+            sb.append("Serialized File Size");
             sb.append('\n');
 
             //pw.print(sb.toString());
