@@ -2,6 +2,7 @@ package classuc;
 
 import benchmark.ClassUCProtos;
 import benchmark.ClassUCProtosBuilders;
+import benchmark.MainClassUCProtos;
 import classuc.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,7 +20,7 @@ public class MainGson {
 
     public static int NUM_STUDENTS;
     public static final String INITIAL_PATH = "textual-v2/number-students-";
-    public static final String PATH_CSV = "textual-v2/results.csv";
+    public static final String PATH_CSV = "textual-v2/results-v2.csv";
     public static String FILE_PATH; // O/I the Protocol Buffers Stream
 
     public static void main(String[] args) {
@@ -29,6 +30,15 @@ public class MainGson {
         FILE_PATH = INITIAL_PATH + NUM_STUDENTS + ".txt";
 
         initCSV(); // Fill column headers
+
+        // Read Initialization Time
+        ClassUC firstClassUCtoSerialize = ClassUCBuilders.buildClassUC(NUM_STUDENTS);
+        BenchmarkTimes benchmarkTimesF = JsonFile.writeRead(firstClassUCtoSerialize,PATH_CSV);
+        writeCSV(1,-1,
+                benchmarkTimesF.getInitialization(),
+                benchmarkTimesF.getSerialization(),
+                benchmarkTimesF.getDeserialization(),
+                benchmarkTimesF.getSerializedSize());
 
         while(exponent <= MAX_EXPONENT) {
             for (int i = 0; i < 10; i++) {

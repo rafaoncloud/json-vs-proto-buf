@@ -13,7 +13,7 @@ public class MainClassUCProtos {
 
     public static int NUM_STUDENTS;
     public static final String INITIAL_PATH = "binary-v2/number-students-";
-    public static final String PATH_CSV = "binary-v2/results-v2.csv";
+    public static final String PATH_CSV = "binary-v2/results-v3.csv";
     public static String FILE_PATH; // O/I the Protocol Buffers Stream
 
     public static void main(String[] args) {
@@ -24,9 +24,19 @@ public class MainClassUCProtos {
 
         initCSV(); // Fill column headers
 
+        // Read Initialization Time
+        ClassUCProtos.ClassUC firstClassUCtoSerialize = ClassUCProtosBuilders.buildClassUC(NUM_STUDENTS);
+        BenchmarkTimes benchmarkTimesF = MainClassUCProtos.writeRead(firstClassUCtoSerialize,PATH_CSV);
+        writeCSV(1024,-1,
+                benchmarkTimesF.getInitialization(),
+                benchmarkTimesF.getSerialization(),
+                benchmarkTimesF.getDeserialization(),
+                benchmarkTimesF.getSerializedSize());
+
+
         while(exponent <= MAX_EXPONENT) {
             for (int i = 0; i < 10; i++) {
-                FILE_PATH = INITIAL_PATH + NUM_STUDENTS + "-rep-" + (i+1) + ".txt";
+                //FILE_PATH = INITIAL_PATH + NUM_STUDENTS + "-rep-" + (i+1) + ".txt";
                 // Create Object to serialize and deserialize
                 ClassUCProtos.ClassUC classUC = ClassUCProtosBuilders.buildClassUC(NUM_STUDENTS);
 
